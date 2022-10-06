@@ -21,10 +21,11 @@ model Posts {
     title    String
     Users    Users?   @relation(fields: [usersId], references: [id])
     usersId  Int?
+    summary  String?  @default("")
     text     String
     image    String
     createAt DateTime @default(now())
 
-    @@unique(fields: [title, usersId], name: "credentialsId")
+    @@unique(fields: [title, usersId], name: "postsTitleAndId")
     @@map("posts")
 }
