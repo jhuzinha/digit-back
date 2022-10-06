@@ -38,6 +38,8 @@ export async function patchPost(req: Request, res: Response) {
 }
 
 export async function deletePost(req: Request, res: Response) {
+    const idPost = Number(req.params.idPost)
     const user = await validateToken(req.headers)
-    return res.status(200).send()
+    await postService.deletePost(idPost, user.id)
+    return res.status(200).send("Post deletado com sucesso")
 }

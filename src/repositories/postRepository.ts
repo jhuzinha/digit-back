@@ -30,3 +30,7 @@ export async function deleteById(postId: number) {
 export async function verifyUserIdWithPost(usersId: number, postId: number) {
     return await prisma.posts.findFirst({where: {usersId, id: postId} })
 }
+
+export async function findTitleAndId(idUser: number, title: string) {
+    return await prisma.posts.findFirst({where: {usersId: idUser, title}})
+}
