@@ -15,18 +15,24 @@ export async function createPost(post: Post, usersId: number) {
     return postCreated
 }
 
-export async function getUserPost(userId: number) {
+export async function getUserPost(userId: number, page: number) {
     const user = await authFunctions.findById(userId)
+    if(isNaN(page)){
+        page = 1
+    }
     if(!user){
         throw { type: "Not Found", message: "User not found" }
     }
-    const Posts = await functionsPosts.getUserPost(userId)
+    const Posts = await functionsPosts.getUserPost(userId, page)
     return Posts
 }
 
 
-export async function getAllPost() {
-    const Posts = await functionsPosts.getAll()
+export async function getAllPost(page: number) {
+    if(isNaN(page)){
+        page = 1
+    }
+    const Posts = await functionsPosts.getAll(page)
     return Posts
 }
 
@@ -38,13 +44,21 @@ export async function getPostById(postId: number) {
     return post
 }
 
-export async function patchPost(postId: number) {
-    
+export async function patchPost(postId: number, userId: number, edit: functionsPosts.Edit) {
+    const existPost = await functionsPosts.getPostById(postId)
+    if(existPost.length === 0){
+        throw { type: "Not Found", message: "Post not found" }
+    }
+    const post = await functionsPosts.verifyUserIdWithPost(userId, postId)
+    if(!post){
+        throw { type: "Forbidden", message: "You don't have permission" }
+    }
+    await functionsPosts.patchById(postId, edit)
+    return
 }
 
 export async function deletePost(postId: number, userId: number) {
     const existPost = await functionsPosts.getPostById(postId)
-    console.log(existPost)
     if(existPost.length === 0){
         throw { type: "Not Found", message: "Post not found" }
     }
