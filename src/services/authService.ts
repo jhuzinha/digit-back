@@ -16,7 +16,7 @@ export async function loginUser(user: IUsersType) {
     if (! (await bcrypt.compare(user.password, existUser.password))) {
         throw { type: "Unauthorized", message: "Password or Email wrong" }
     }
-    const token = jwt.sign({ id: existUser.id }, process.env.SECRET_TOKEN!, { expiresIn: '1d' })
+    const token = jwt.sign({ id: existUser.id }, process.env.SECRET_TOKEN! as string, { expiresIn: '1h'})
     return token
 }
 
