@@ -17,7 +17,8 @@ describe("unit", () => {
             usersId: '1',
             title: 'asdadasda',
             text: 'asdasdasda',
-            image: 'asdasdasd'
+            image: 'asdasdasd',
+            summary: ''
         }
         const userId = 1
         jest.spyOn(authRepository, 'findById').mockResolvedValueOnce({
@@ -34,7 +35,8 @@ describe("unit", () => {
             usersId: userId,
             text: 'dasdawwadw',
             image: 'sdadada',
-            createAt: new Date()
+            createAt: new Date(),
+            summary: ''
         }
         )
         await expect(postService.createPost(post, userId)).resolves.not.toThrow()

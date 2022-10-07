@@ -16,12 +16,11 @@ export async function createPost(post: Post, usersId: number) {
 }
 
 export async function getUserPost(userId: number, page: number) {
-    const user = await authFunctions.findById(userId)
+    if(isNaN(userId)){
+        throw { type: "Not Found", message: "User not found" }
+    }
     if(isNaN(page)){
         page = 1
-    }
-    if(!user){
-        throw { type: "Not Found", message: "User not found" }
     }
     const Posts = await functionsPosts.getUserPost(userId, page)
     return Posts

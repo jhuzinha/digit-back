@@ -10,17 +10,21 @@ export async function create(post: PostsCreate) {
 export async function getAll(pag: number) {
     const NUMBER_VISIBLE = 10
     const page = pagination(pag, NUMBER_VISIBLE)
-    return await prisma.posts.findMany({take: 10, skip: page, orderBy: {createAt: 'desc'}})
+    return await prisma.posts.findMany({distinct: ['id'], select: {title: true, summary: true, id: true, image: true, createAt: true ,Users:{select: { email: true, id: true}}} , orderBy: {createAt: 'desc'}})
 }
 
 export async function getUserPost(userId: number, pag: number) {
     const NUMBER_VISIBLE = 10
     const page = pagination(pag, NUMBER_VISIBLE)
-    return await prisma.posts.findMany({ take: 10, skip: page ,orderBy: {createAt: 'desc'}, where: {usersId: userId}})
+    return await prisma.posts.findMany({ take: 10, distinct: ['id'], skip: page, 
+    select: {title: true, summary: true, text: false,  id: true, image: true, 
+    createAt: true ,Users:{select: { email: true, id: true}}}, 
+    orderBy: {createAt: 'desc'}, 
+    where: {usersId: userId}})
 }
 
 export async function getPostById(postId: number) {
-    return await prisma.posts.findMany({where: {id: postId}})
+    return await prisma.posts.findMany({where: {id: postId}, distinct: ['id'], select: {title: true, summary: true, text: true,  id: true, image: true, createAt: true ,Users:{select: { email: true, id: true}}}})
 }
 
 export interface Edit {
