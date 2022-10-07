@@ -29,16 +29,17 @@ interface NewPosts {
 export async function getAllPost(req: Request, res: Response) {
     const page = Number(req.query.page)
     const posts = await postService.getAllPost(page)
-    const newPosts: NewPosts[] = removeText(posts)
-    return res.status(200).send(newPosts)
+    // const newPosts: NewPosts[] = removeText(posts)
+    return res.status(200).send(posts)
 }
 
 export async function getUserPost(req: Request, res: Response) {
-    const userId = Number(req.params.userId)
+    const user = await validateToken(req.headers)
+    console.log(user)
     const page = Number(req.query.page)
-    const posts = await postService.getUserPost(userId, page)
-    const newPosts: NewPosts[] = removeText(posts)
-    return res.status(200).send(newPosts)
+    const posts = await postService.getUserPost(user.id, page)
+    // const newPosts: NewPosts[] = removeText(posts)
+    return res.status(200).send(posts)
 }
 
 export async function getPostById(req: Request, res: Response) {
